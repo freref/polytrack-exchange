@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="../static/css/output.css" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <script
+      src="https://unpkg.com/htmx.org@2.0.3"
+      integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div hx-get="/nav" hx-trigger="load"></div>
+    <div>
+      <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-80">
+          <form class="space-y-4" hx-post="/login/submit">
+            <div>
+              <label for="first" class="block text-sm font-medium text-gray-700"
+                >Username:</label
+              >
+              <input
+                type="text"
+                id="first"
+                name="first"
+                placeholder="Username"
+                class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                for="password"
+                class="block text-sm font-medium text-gray-700"
+                >Password:</label
+              >
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+            >
+              Login
+            </button>
+            <p class="text-center text-sm mt-4">
+              New user?
+              <a href="register" class="text-blue-500 hover:underline"
+                >Create account here</a
+              >
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
