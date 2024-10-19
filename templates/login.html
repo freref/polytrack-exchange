@@ -18,7 +18,7 @@
       hx-trigger="load"
       class="fixed top-0 left-0 w-full z-50"
     ></div>
-    <div>
+    <div id="card">
       <div class="flex items-center justify-center min-h-screen">
         <div class="p-8 rounded-lg shadow-lg w-80">
           <form
@@ -68,7 +68,11 @@
             </div>
             <p class="text-center text-sm mt-4">
               New user?
-              <a href="register" class="text-blue-500 hover:underline"
+              <a
+                hx-get="/register"
+                hx-target="#card"
+                hx-swap="innerHTML"
+                class="text-blue-500 hover:underline cursor-pointer"
                 >Create account here</a
               >
             </p>
