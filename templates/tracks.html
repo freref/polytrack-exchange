@@ -41,7 +41,8 @@
       id="select-button"
     >
       <select class="select select-bordered w-40 select-sm">
-        <option selected>Upvotes</option>
+        <option>Upvotes</option>
+        <option selected>New</option>
         <option>Downvotes</option>
         <option>Views</option>
         <option>Players</option>
@@ -55,5 +56,12 @@
         Add track
       </button>
     </div>
+    <ul class="list-group fs-5 me-5" id="film-list">
+      {{ range .Tracks }}
+      <li class="list-group-item bg-primary text-white">
+        {{ .Title }} - {{ .Description }}
+      </li>
+      {{ end }}
+    </ul>
   </body>
 </html>

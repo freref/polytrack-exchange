@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"text/template"
 
@@ -21,7 +20,6 @@ func AddTrack(w http.ResponseWriter, r *http.Request) {
 
 func SubmitTrack(dbpool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("hits\n")
 		err := r.ParseForm()
 		if err != nil {
 			// handle error
@@ -29,11 +27,12 @@ func SubmitTrack(dbpool *pgxpool.Pool) http.HandlerFunc {
 		}
 
 		title := r.FormValue("title")
-		code := r.FormValue("code")
+		code := r.FormValue("description")
+		description := r.FormValue("code")
 
-		sql := `INSERT INTO tracks (title, code, upvote, downvote) VALUES ($1, $2, $3, $4)`
+		sql := `INSERT INTO tracks (title, code, track_description, upvote, downvote) VALUES ($1, $2, $3, $4, $5)`
 
-		_, err = dbpool.Exec(context.Background(), sql, title, code, 1, 0)
+		_, err = dbpool.Exec(context.Background(), sql, title, description, code, 1, 0)
 		if err != nil {
 			// handle error
 		}

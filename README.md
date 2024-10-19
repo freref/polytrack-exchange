@@ -10,7 +10,7 @@ A central place for people to find tracks, leaderboard, records and more for the
 
 ## Instructions
 
-### Generate tailwind.css
+### Generate output.css
 
 ```sh
 tailwindcss-extra -i ./static/css/input.css -o ./static/css/output.css --watch
