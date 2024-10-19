@@ -2,7 +2,7 @@
   class="flex justify-between items-center"
   style="width: 60%; margin: 10px auto"
 >
-  <div class="w-full space-y-2">
+  <form class="w-full space-y-2" hx-post="/tracks/submit">
     <h2 class="card-title">Add track</h2>
     <label class="form-control w-full max-w-xs">
       <div class="label">
@@ -12,6 +12,9 @@
         type="text"
         placeholder="Title"
         class="input input-bordered w-full max-w-xs"
+        name="title"
+        id="title"
+        required
       />
     </label>
     <label class="form-control w-full max-w-xs">
@@ -21,6 +24,9 @@
       <input
         type="file"
         class="file-input file-input-bordered w-full max-w-xs"
+        name="image"
+        id="image"
+        accept="image/*"
       />
     </label>
     <label class="form-control">
@@ -30,10 +36,13 @@
       <textarea
         class="textarea textarea-bordered h-32"
         placeholder="Code"
+        name="code"
+        id="code"
+        required
       ></textarea>
     </label>
     <div class="card-actions justify-end">
-      <button hx-post="tracks/submit" class="btn btn-secondary">Submit</button>
+      <button type="submit" class="btn btn-secondary">Submit</button>
     </div>
-  </div>
+  </form>
 </div>

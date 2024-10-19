@@ -28,6 +28,7 @@ func main() {
 	http.HandleFunc("/", handlers.Home)
 	http.HandleFunc("/tracks", handlers.Tracks)
 	http.HandleFunc("/tracks/add", handlers.AddTrack)
+	http.HandleFunc("/tracks/submit", handlers.SubmitTrack(dbpool))
 	// auth
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/login/submit", handlers.LoginSubtmit(dbpool))
