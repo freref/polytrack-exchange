@@ -2,15 +2,53 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"text/template"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func Tracks(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
-	tmpl.Execute(w, nil)
+type Track struct {
+	Id          int
+	Title       string
+	Description string
+	Code        string
+	Vote        int
+}
+
+func GetTracks(dbpool *pgxpool.Pool, tracks *[]Track) {
+	sql := `SELECT * FROM tracks`
+	rows, err := dbpool.Query(context.Background(), sql)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var track Track
+
+		err := rows.Scan(&track.Id, &track.Title, &track.Description, &track.Code, &track.Vote)
+		if err != nil {
+			fmt.Println(err)
+			// handle error
+		}
+		*tracks = append(*tracks, track)
+	}
+
+	if err = rows.Err(); err != nil {
+		fmt.Println(err)
+		// handle error
+	}
+}
+
+func Tracks(dbpool *pgxpool.Pool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
+		var tracks []Track
+		GetTracks(dbpool, &tracks)
+		tmpl.Execute(w, tracks)
+	}
 }
 
 func AddTrack(w http.ResponseWriter, r *http.Request) {
@@ -30,13 +68,17 @@ func SubmitTrack(dbpool *pgxpool.Pool) http.HandlerFunc {
 		code := r.FormValue("description")
 		description := r.FormValue("code")
 
-		sql := `INSERT INTO tracks (title, code, track_description, upvote, downvote) VALUES ($1, $2, $3, $4, $5)`
+		sql := `INSERT INTO tracks (title, code, track_description, vote) VALUES ($1, $2, $3, $4)`
 
-		_, err = dbpool.Exec(context.Background(), sql, title, description, code, 1, 0)
+		_, err = dbpool.Exec(context.Background(), sql, title, description, code, 1)
 		if err != nil {
 			// handle error
 		}
+
+		var tracks []Track
+		GetTracks(dbpool, &tracks)
+
 		tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
-		tmpl.Execute(w, nil)
+		tmpl.Execute(w, tracks)
 	}
 }

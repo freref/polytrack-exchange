@@ -29,7 +29,7 @@ func main() {
 	http.HandleFunc("/", handlers.Home)
 	http.HandleFunc("/home", handlers.HomeContent)
 	// tracks
-	http.HandleFunc("/tracks", handlers.Tracks)
+	http.HandleFunc("/tracks", handlers.Tracks(dbpool))
 	http.HandleFunc("/tracks/add", handlers.AddTrack)
 	http.HandleFunc("/tracks/submit", handlers.SubmitTrack(dbpool))
 	// records

@@ -15,7 +15,7 @@
   <div class="flex space-x-4">
     <select class="select select-bordered w-40 select-sm">
       <option selected>New</option>
-      <option>Upvotes</option>
+      <option>Votes</option>
       <option>Views</option>
       <option>Players</option>
     </select>
@@ -27,17 +27,22 @@
   <button
     class="btn btn-secondary btn-outline btn-sm"
     hx-post="/tracks/add"
-    hx-target="#select-button"
-    hx-swap="outerHTML"
+    hx-target="#main-content"
+    hx-swap="innerHTML"
   >
     Add track
   </button>
 </div>
 
-<ul class="list-group fs-5 me-5" id="film-list">
-  {{ range .Tracks }}
-  <li class="list-group-item bg-primary text-white">
-    {{ .Title }} - {{ .Description }}
-  </li>
-  {{ end }}
-</ul>
+<div style="width: 60%; margin: 10px auto">
+  <ul class="list-group fs-5 me-5" id="film-list">
+    {{ range . }}
+    <li class="list-group-item">
+      <p class="font-medium text-lg">{{ .Title }}</p>
+      <p>{{ .Description }}</p>
+      <p>{{ .Vote }}</p>
+    </li>
+    <hr />
+    {{ end }}
+  </ul>
+</div>
