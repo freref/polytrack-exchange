@@ -17,7 +17,12 @@
     <div>
       <div class="flex items-center justify-center min-h-screen">
         <div class="bg-white p-8 rounded-lg shadow-lg w-80">
-          <form class="space-y-4" hx-post="/login/submit">
+          <form
+            class="space-y-4"
+            hx-post="/login/submit"
+            hx-target="#login-error"
+            hx-swap="innerHTML"
+          >
             <div>
               <label for="first" class="block text-sm font-medium text-gray-700"
                 >Username:</label
@@ -30,6 +35,12 @@
                 class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 required
               />
+
+              <div id="login-error">
+                {{ block "login-error-block" .}}
+                <p class="text-red-500 text-sm pt-1">{{.ErrorMessage}}</p>
+                {{ end }}
+              </div>
             </div>
 
             <div>

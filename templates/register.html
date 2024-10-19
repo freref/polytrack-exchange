@@ -11,14 +11,13 @@
       integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
       crossorigin="anonymous"
     ></script>
-    <script src="../static/js/togglePassword.js"></script>
   </head>
   <body>
     <div hx-get="/nav" hx-trigger="load"></div>
     <div>
       <div class="flex items-center justify-center min-h-screen">
         <div class="bg-white p-8 rounded-lg shadow-lg w-80">
-          <form class="space-y-4" hx-post="/login/submit">
+          <form class="space-y-4" hx-post="/register/submit">
             <div>
               <label for="first" class="block text-sm font-medium text-gray-700"
                 >Username:</label
@@ -39,7 +38,7 @@
               >
               <input
                 type="text"
-                id="text"
+                id="email"
                 name="email"
                 placeholder="Email Address"
                 class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
