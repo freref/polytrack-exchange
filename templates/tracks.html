@@ -37,10 +37,17 @@
 <div style="width: 60%; margin: 10px auto">
   <ul class="list-group fs-5 me-5" id="film-list">
     {{ range . }}
-    <li class="list-group-item">
-      <p class="font-medium text-lg">{{ .Title }}</p>
-      <p>{{ .Description }}</p>
-      <p>{{ .Vote }}</p>
+    <li class="list-group-item flex items-center space-x-4 py-3">
+      <img
+        class="w-16 h-16 object-cover rounded-md"
+        src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
+        alt="Film placeholder"
+      />
+      <div>
+        <p class="font-medium text-lg">{{ .Title }}</p>
+        <p>{{ .Description }}</p>
+        <p>{{ .Vote }}</p>
+      </div>
     </li>
     <hr />
     {{ end }}
