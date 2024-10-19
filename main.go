@@ -25,7 +25,9 @@ func main() {
 	// === components === //
 	http.HandleFunc("/nav", handlers.Nav)
 	// === pages === //
+	// home
 	http.HandleFunc("/", handlers.Home)
+	http.HandleFunc("/home", handlers.HomeContent)
 	// tracks
 	http.HandleFunc("/tracks", handlers.Tracks)
 	http.HandleFunc("/tracks/add", handlers.AddTrack)

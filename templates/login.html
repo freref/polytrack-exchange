@@ -13,11 +13,20 @@
     ></script>
   </head>
   <body>
-    <div
-      hx-get="/nav"
-      hx-trigger="load"
-      class="fixed top-0 left-0 w-full z-50"
-    ></div>
+    <div class="navbar pt-2">
+      <div class="navbar-start">
+        <a href="/" class="btn btn-ghost text-xl">Exchange</a>
+      </div>
+      <div class="navbar-end">
+        <ul class="menu menu-horizontal px-1">
+          <li>
+            <p>&nbsp;</p>
+          </li>
+        </ul>
+        <a href="/login" class="btn btn-primary">Login</a>
+      </div>
+    </div>
+
     <div id="card">
       <div class="flex items-center justify-center min-h-screen">
         <div class="p-8 rounded-lg shadow-lg w-80">
