@@ -8,17 +8,22 @@
 </p>
 
 <div
-  class="flex justify-between items-center"
+  class="flex justify-between items-center pt-2"
   style="width: 60%; margin: 10px auto"
   id="select-button"
 >
-  <select class="select select-bordered w-40 select-sm">
-    <option>Upvotes</option>
-    <option selected>New</option>
-    <option>Downvotes</option>
-    <option>Views</option>
-    <option>Players</option>
-  </select>
+  <div class="flex space-x-4">
+    <select class="select select-bordered w-40 select-sm">
+      <option selected>New</option>
+      <option>Upvotes</option>
+      <option>Views</option>
+      <option>Players</option>
+    </select>
+    <select class="select select-bordered w-32 select-sm">
+      <option selected>Card</option>
+      <option>Compact</option>
+    </select>
+  </div>
   <button
     class="btn btn-secondary btn-outline btn-sm"
     hx-post="/tracks/add"
@@ -28,6 +33,7 @@
     Add track
   </button>
 </div>
+
 <ul class="list-group fs-5 me-5" id="film-list">
   {{ range .Tracks }}
   <li class="list-group-item bg-primary text-white">
