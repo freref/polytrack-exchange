@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"net/mail"
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -39,12 +40,8 @@ func main() {
 	}
 
 	hLoginSubmit := func(w http.ResponseWriter, r *http.Request) {
-		data := Error{
-			ErrorMessage: "User does not exist",
-		}
-
 		tmpl := template.Must(template.ParseFiles("./templates/login.html"))
-		tmpl.ExecuteTemplate(w, "login-error-block", data)
+		tmpl.ExecuteTemplate(w, "login-error-block", Error{ErrorMessage: "User does not exist"})
 	}
 
 	hRegister := func(w http.ResponseWriter, r *http.Request) {
@@ -53,38 +50,58 @@ func main() {
 	}
 
 	hRegisterSubmit := func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("hRegisterSubmit \n")
+		tmpl := template.Must(template.ParseFiles("./templates/register.html"))
 
 		err := r.ParseForm()
 		if err != nil {
-			fmt.Printf("ERROR parse")
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Invalid inputs, please try again"})
 		}
 
 		username := r.FormValue("username")
 		email := r.FormValue("email")
 		password := r.FormValue("password")
+		confirm := r.FormValue("confirm")
+
+		if confirm != password {
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Passwords don't match"})
+			return
+		}
+
+		_, err = mail.ParseAddress(email)
+		if err != nil {
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Not a valid email address"})
+			return
+		}
+
+		var existingUser string
+		sql := `SELECT username FROM users WHERE username = $1`
+		err = dbpool.QueryRow(context.Background(), sql, username).Scan(&existingUser)
+		if err == nil {
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Username already exists"})
+			return
+		}
+
+		var existingEmail string
+		sql = `SELECT username FROM users WHERE email = $1`
+		err = dbpool.QueryRow(context.Background(), sql, email).Scan(&existingEmail)
+		if err == nil {
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Email already exists"})
+			return
+		}
 
 		hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		if err != nil {
-			fmt.Printf("ERROR password")
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "We had issues processing your password, please try again"})
 		}
 
-		fmt.Println(username)
-		fmt.Println(email)
-		fmt.Println(password)
-		fmt.Println(string(hash))
-
-		sql := `INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)`
+		sql = `INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)`
 
 		_, err = dbpool.Exec(context.Background(), sql, username, email, string(hash))
 		if err != nil {
-			fmt.Printf("ERROR inserting user into DB: %v\n", err)
+			fmt.Println("error insert")
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Server failed, please try again"})
 		}
-
-		var res string
-		_ = dbpool.QueryRow(context.Background(), "SELECT * FROM users").Scan(&res)
-
-		fmt.Println(res)
+		tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Success"})
 	}
 
 	hNav := func(w http.ResponseWriter, r *http.Request) {

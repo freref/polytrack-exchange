@@ -17,7 +17,12 @@
     <div>
       <div class="flex items-center justify-center min-h-screen">
         <div class="bg-white p-8 rounded-lg shadow-lg w-80">
-          <form class="space-y-4" hx-post="/register/submit">
+          <form
+            class="space-y-4"
+            hx-post="/register/submit"
+            hx-target="#register-error"
+            hx-swap="innerHTML"
+          >
             <div>
               <label for="first" class="block text-sm font-medium text-gray-700"
                 >Username:</label
@@ -87,6 +92,11 @@
               Register
             </button>
           </form>
+          <div id="register-error">
+            {{ block "register-error-block" .}}
+            <p class="text-red-500 text-sm">{{ .ErrorMessage }}</p>
+            {{end}}
+          </div>
         </div>
       </div>
     </div>
