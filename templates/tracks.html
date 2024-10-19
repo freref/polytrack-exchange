@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../static/css/output.css" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Polytrack Explorer</title>
+    <script
+      src="https://unpkg.com/htmx.org@2.0.3"
+      integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div hx-get="/nav" hx-trigger="load"></div>
+    <div
+      class="text-center flex justify-center items-center bg-cover bg-center rounded-lg shadow-lg"
+      style="
+        background-image: url('/static/images/mountains.png');
+        width: 60%;
+        height: 200px;
+        margin: 0 auto;
+      "
+    >
+      <p class="inline-flex text-9xl font-bold font-poppins items-center">
+        <span
+          class="bg-gradient-to-r from-green-400 via-green-500 to-teal-500 bg-clip-text text-transparent"
+          >Tracks</span
+        >
+      </p>
+    </div>
+
+    <div
+      class="flex justify-between items-center"
+      style="width: 60%; margin: 10px auto"
+      id="select-button"
+    >
+      <select class="select select-bordered w-40 select-sm">
+        <option selected>Upvotes</option>
+        <option>Downvotes</option>
+        <option>Views</option>
+        <option>Players</option>
+      </select>
+      <button
+        class="btn btn-secondary btn-outline btn-sm"
+        hx-post="/tracks/add"
+        hx-target="#select-button"
+        hx-swap="outerHTML"
+      >
+        Add track
+      </button>
+    </div>
+  </body>
+</html>

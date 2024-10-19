@@ -22,11 +22,12 @@ func main() {
 	}
 	defer dbpool.Close()
 
-	// pages
-	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/maps", handlers.Maps)
 	// components
 	http.HandleFunc("/nav", handlers.Nav)
+	// pages
+	http.HandleFunc("/", handlers.Home)
+	http.HandleFunc("/tracks", handlers.Tracks)
+	http.HandleFunc("/tracks/add", handlers.AddTrack)
 	// auth
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/login/submit", handlers.LoginSubtmit(dbpool))

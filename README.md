@@ -1,6 +1,6 @@
 # Polytrack Exchange
 
-A central place for people to find maps, leaderboard, records and more for the game [PolyTrack](https://www.kodub.com/apps/polytrack). The website is written in Golang and HTMX.
+A central place for people to find tracks, leaderboard, records and more for the game [PolyTrack](https://www.kodub.com/apps/polytrack). The website is written in Golang and HTMX.
 
 ## Requirements
 
