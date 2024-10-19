@@ -17,11 +17,13 @@ type Track struct {
 	Vote        int
 }
 
-func GetTracks(dbpool *pgxpool.Pool, tracks *[]Track) {
-	sql := `SELECT * FROM tracks`
+func GetTracks(dbpool *pgxpool.Pool) []Track {
+	var tracks []Track
+	sql := `SELECT * FROM tracks ORDER BY Id DESC`
 	rows, err := dbpool.Query(context.Background(), sql)
 	if err != nil {
 		fmt.Println(err)
+		return tracks
 	}
 	defer rows.Close()
 
@@ -32,21 +34,23 @@ func GetTracks(dbpool *pgxpool.Pool, tracks *[]Track) {
 		if err != nil {
 			fmt.Println(err)
 			// handle error
+			return tracks
 		}
-		*tracks = append(*tracks, track)
+		tracks = append(tracks, track)
 	}
 
 	if err = rows.Err(); err != nil {
 		fmt.Println(err)
 		// handle error
 	}
+
+	return tracks
 }
 
 func Tracks(dbpool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
-		var tracks []Track
-		GetTracks(dbpool, &tracks)
+		tracks := GetTracks(dbpool)
 		tmpl.Execute(w, tracks)
 	}
 }
@@ -75,8 +79,7 @@ func SubmitTrack(dbpool *pgxpool.Pool) http.HandlerFunc {
 			// handle error
 		}
 
-		var tracks []Track
-		GetTracks(dbpool, &tracks)
+		tracks := GetTracks(dbpool)
 
 		tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
 		tmpl.Execute(w, tracks)
