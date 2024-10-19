@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -24,7 +23,6 @@ func main() {
 	dbURL := os.Getenv("DATABASE_URL")
 	dbpool, err := pgxpool.New(context.Background(), dbURL)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to create connection pool: %v\n", err)
 		os.Exit(1)
 	}
 	defer dbpool.Close()
@@ -41,7 +39,31 @@ func main() {
 
 	hLoginSubmit := func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("./templates/login.html"))
-		tmpl.ExecuteTemplate(w, "login-error-block", Error{ErrorMessage: "User does not exist"})
+
+		err := r.ParseForm()
+		if err != nil {
+			tmpl.ExecuteTemplate(w, "login-error-block", Error{ErrorMessage: "Invalid inputs, please try again"})
+			return
+		}
+
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+
+		var password_hash string
+		sql := `SELECT password_hash FROM users WHERE username = $1`
+		err = dbpool.QueryRow(context.Background(), sql, username).Scan(&password_hash)
+		if err != nil {
+			tmpl.ExecuteTemplate(w, "login-error-block", Error{ErrorMessage: "User doesn't exist"})
+			return
+		}
+
+		err = bcrypt.CompareHashAndPassword([]byte(password_hash), []byte(password))
+		if err != nil {
+			tmpl.ExecuteTemplate(w, "login-error-block", Error{ErrorMessage: "Password incorect, try again"})
+			return
+		}
+
+		tmpl.ExecuteTemplate(w, "login-error-block", Error{ErrorMessage: "Success"})
 	}
 
 	hRegister := func(w http.ResponseWriter, r *http.Request) {
@@ -62,17 +84,6 @@ func main() {
 		password := r.FormValue("password")
 		confirm := r.FormValue("confirm")
 
-		if confirm != password {
-			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Passwords don't match"})
-			return
-		}
-
-		_, err = mail.ParseAddress(email)
-		if err != nil {
-			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Not a valid email address"})
-			return
-		}
-
 		var existingUser string
 		sql := `SELECT username FROM users WHERE username = $1`
 		err = dbpool.QueryRow(context.Background(), sql, username).Scan(&existingUser)
@@ -82,10 +93,21 @@ func main() {
 		}
 
 		var existingEmail string
-		sql = `SELECT username FROM users WHERE email = $1`
+		sql = `SELECT email FROM users WHERE email = $1`
 		err = dbpool.QueryRow(context.Background(), sql, email).Scan(&existingEmail)
 		if err == nil {
 			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Email already exists"})
+			return
+		}
+
+		_, err = mail.ParseAddress(email)
+		if err != nil {
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Not a valid email address"})
+			return
+		}
+
+		if confirm != password {
+			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Passwords don't match"})
 			return
 		}
 
@@ -98,7 +120,6 @@ func main() {
 
 		_, err = dbpool.Exec(context.Background(), sql, username, email, string(hash))
 		if err != nil {
-			fmt.Println("error insert")
 			tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Server failed, please try again"})
 		}
 		tmpl.ExecuteTemplate(w, "register-error-block", Error{ErrorMessage: "Success"})
@@ -107,8 +128,6 @@ func main() {
 	hNav := func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "templates/components/nav.html")
 	}
-
-	fmt.Printf("main \n")
 
 	http.HandleFunc("/", h1)
 	http.HandleFunc("/nav", hNav)

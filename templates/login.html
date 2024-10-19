@@ -29,18 +29,12 @@
               >
               <input
                 type="text"
-                id="first"
-                name="first"
+                id="username"
+                name="username"
                 placeholder="Username"
                 class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 required
               />
-
-              <div id="login-error">
-                {{ block "login-error-block" .}}
-                <p class="text-red-500 text-sm pt-1">{{.ErrorMessage}}</p>
-                {{ end }}
-              </div>
             </div>
 
             <div>
@@ -58,13 +52,19 @@
                 required
               />
             </div>
-
-            <button
-              type="submit"
-              class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-            >
-              Login
-            </button>
+            <div>
+              <button
+                type="submit"
+                class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+              >
+                Login
+              </button>
+              <div id="login-error">
+                {{ block "login-error-block" .}}
+                <p class="text-red-500 text-sm pt-1">{{.ErrorMessage}}</p>
+                {{ end }}
+              </div>
+            </div>
             <p class="text-center text-sm mt-4">
               New user?
               <a href="register" class="text-blue-500 hover:underline"
