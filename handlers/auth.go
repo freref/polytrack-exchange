@@ -4,14 +4,32 @@ import (
 	"context"
 	"net/http"
 	"net/mail"
+	"os"
 	"text/template"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Error struct {
 	ErrorMessage string
+}
+
+func createJWT(username string) (string, error) {
+	jwtKey := os.Getenv("JWT_KEY")
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": username,
+		"exp":      time.Now().Add(15 * time.Minute).Unix(),
+	})
+
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		return "", err
+	}
+	return tokenString, nil
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -45,6 +63,19 @@ func LoginSubtmit(dbpool *pgxpool.Pool) http.HandlerFunc {
 			tmpl.ExecuteTemplate(w, "login-error-block", Error{ErrorMessage: "Password incorect, try again"})
 			return
 		}
+
+		tokenString, err := createJWT(username)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "token",
+			Value:    tokenString,
+			Expires:  time.Now().Add(15 * time.Minute),
+			HttpOnly: true,
+		})
 
 		tmpl.ExecuteTemplate(w, "login-error-block", Error{ErrorMessage: "Success"})
 	}

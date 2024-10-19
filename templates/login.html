@@ -16,7 +16,7 @@
     <div hx-get="/nav" hx-trigger="load"></div>
     <div>
       <div class="flex items-center justify-center min-h-screen">
-        <div class="bg-white p-8 rounded-lg shadow-lg w-80">
+        <div class="p-8 rounded-lg shadow-lg w-80">
           <form
             class="space-y-4"
             hx-post="/login/submit"
@@ -53,10 +53,7 @@
               />
             </div>
             <div>
-              <button
-                type="submit"
-                class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-              >
+              <button type="submit" class="w-full btn btn-primary">
                 Login
               </button>
               <div id="login-error">

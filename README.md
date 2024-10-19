@@ -1,14 +1,14 @@
 # Requirements
 
-- Standalone Tailwind CLI
-- Go
+- **Standalone Tailwind CLI** compiled with daisyUI, instructions to compile can be found [here](https://github.com/tailwindlabs/tailwindcss/discussions/12294#discussioncomment-8268378). A precompiled solution can be found [here](https://github.com/dobicinaitis/tailwind-cli-extra).
+- **Go**
 
 # Instructions
 
 ## Generate tailwind.css
 
 ```sh
-tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
+tailwindcss-extra -i ./static/css/input.css -o ./static/css/output.css --watch
 ```
 
 ## Build

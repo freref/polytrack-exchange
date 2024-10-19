@@ -1,8 +1,33 @@
-<div class="flex justify-between fixed top-0 left-0 w-full z-10">
-  <div class="flex space-x-4">
-    <a href="/">Home</a>
-    <a href="/maps">Maps</a>
-    <a href="/leaderboard">Leaderboard</a>
+<div class="navbar">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h8m-8 6h16"
+          />
+        </svg>
+      </div>
+    </div>
+    <a href="/" class="btn btn-ghost text-xl">Poly Exchange</a>
   </div>
-  <a href="/login" class="ml-auto">Login</a>
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1">
+      <li><a href="/maps">Maps</a></li>
+      <li><a href="/leaderboards">Leaderboards</a></li>
+      <li><a href="/records">Records</a></li>
+    </ul>
+  </div>
+  <div class="navbar-end">
+    <a href="/login" class="btn">Login</a>
+  </div>
 </div>
