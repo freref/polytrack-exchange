@@ -36,5 +36,7 @@ func SubmitTrack(dbpool *pgxpool.Pool) http.HandlerFunc {
 		if err != nil {
 			// handle error
 		}
+		tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
+		tmpl.Execute(w, nil)
 	}
 }

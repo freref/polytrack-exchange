@@ -22,19 +22,22 @@ func main() {
 	}
 	defer dbpool.Close()
 
-	// components
+	// === components === //
 	http.HandleFunc("/nav", handlers.Nav)
-	// pages
+	// === pages === //
 	http.HandleFunc("/", handlers.Home)
+	// tracks
 	http.HandleFunc("/tracks", handlers.Tracks)
 	http.HandleFunc("/tracks/add", handlers.AddTrack)
 	http.HandleFunc("/tracks/submit", handlers.SubmitTrack(dbpool))
+	// records
+	http.HandleFunc("/records", handlers.Records)
 	// auth
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/login/submit", handlers.LoginSubtmit(dbpool))
 	http.HandleFunc("/register", handlers.Register)
 	http.HandleFunc("/register/submit", handlers.RegisterSubmit(dbpool))
-	// static
+	// === static === //
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
