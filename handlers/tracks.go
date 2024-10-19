@@ -14,7 +14,6 @@ type Track struct {
 	Title       string
 	Description string
 	Code        string
-	Vote        int
 }
 
 func GetTracks(dbpool *pgxpool.Pool) []Track {
@@ -30,7 +29,7 @@ func GetTracks(dbpool *pgxpool.Pool) []Track {
 	for rows.Next() {
 		var track Track
 
-		err := rows.Scan(&track.Id, &track.Title, &track.Description, &track.Code, &track.Vote)
+		err := rows.Scan(&track.Id, &track.Title, &track.Description, &track.Code)
 		if err != nil {
 			fmt.Println(err)
 			// handle error
@@ -72,9 +71,15 @@ func SubmitTrack(dbpool *pgxpool.Pool) http.HandlerFunc {
 		code := r.FormValue("description")
 		description := r.FormValue("code")
 
-		sql := `INSERT INTO tracks (title, code, track_description, vote) VALUES ($1, $2, $3, $4)`
+		for _, char := range code {
+			if char == ' ' {
+				return
+			}
+		}
 
-		_, err = dbpool.Exec(context.Background(), sql, title, description, code, 1)
+		sql := `INSERT INTO tracks (title, code, track_description) VALUES ($1, $2, $3)`
+
+		_, err = dbpool.Exec(context.Background(), sql, title, description, code)
 		if err != nil {
 			// handle error
 		}

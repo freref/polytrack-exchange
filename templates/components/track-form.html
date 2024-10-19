@@ -67,6 +67,9 @@
         required
       ></textarea>
     </label>
+    {{ block "code-error" .}}
+    <p class="text-red-500">{{ .ErrorMessage }}</p>
+    {{ end }}
     <div class="flex justify-end space-x-2">
       <div class="card-actions justify-end">
         <button
