@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 	"text/template"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -63,25 +64,47 @@ func SubmitTrack(dbpool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
-			// handle error
+			tmpl := template.Must(template.ParseFiles("./templates/components/track-form.html"))
+			tmpl.Execute(w, Error{ErrorMessage: "Server error"})
 			return
 		}
 
 		title := r.FormValue("title")
-		code := r.FormValue("description")
-		description := r.FormValue("code")
+		description := r.FormValue("description")
+		code := r.FormValue("code")
 
-		for _, char := range code {
-			if char == ' ' {
-				return
-			}
+		if strings.Contains(code, " ") {
+			tmpl := template.Must(template.ParseFiles("./templates/components/track-form.html"))
+			tmpl.Execute(w, Error{ErrorMessage: "Invalid track code"})
+			return
 		}
 
-		sql := `INSERT INTO tracks (title, code, track_description) VALUES ($1, $2, $3)`
+		if len(title) > 255 {
+			tmpl := template.Must(template.ParseFiles("./templates/components/track-form.html"))
+			tmpl.Execute(w, Error{ErrorMessage: "Title too long"})
+			return
+		}
 
+		if len(description) > 1000 {
+			tmpl := template.Must(template.ParseFiles("./templates/components/track-form.html"))
+			tmpl.Execute(w, Error{ErrorMessage: "Description too long"})
+			return
+		}
+
+		var existingCode string
+		sql := `SELECT code FROM tracks WHERE code = $1`
+		err = dbpool.QueryRow(context.Background(), sql, code).Scan(&existingCode)
+		if err == nil {
+			tmpl := template.Must(template.ParseFiles("./templates/components/track-form.html"))
+			tmpl.Execute(w, Error{ErrorMessage: "Track with this code has already been uploaded"})
+			return
+		}
+
+		sql = `INSERT INTO tracks (title, code, track_description) VALUES ($1, $2, $3)`
 		_, err = dbpool.Exec(context.Background(), sql, title, description, code)
 		if err != nil {
-			// handle error
+			tmpl := template.Must(template.ParseFiles("./templates/components/track-form.html"))
+			tmpl.Execute(w, Error{ErrorMessage: "Database error, try again"})
 		}
 
 		tracks := GetTracks(dbpool)

@@ -2,7 +2,7 @@ CREATE TABLE
     IF NOT EXISTS tracks (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
-        track_description VARCHAR(255) NOT NULL,
+        track_description VARCHAR(1000) NOT NULL,
         code TEXT NOT NULL
     );
 

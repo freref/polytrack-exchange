@@ -67,22 +67,22 @@
         required
       ></textarea>
     </label>
-    {{ block "code-error" .}}
-    <p class="text-red-500">{{ .ErrorMessage }}</p>
-    {{ end }}
-    <div class="flex justify-end space-x-2">
-      <div class="card-actions justify-end">
-        <button
-          hx-target="#main-content"
-          hx-swap="innerHTML"
-          hx-get="/tracks"
-          class="btn btn-accent"
-        >
-          Cancel
-        </button>
-      </div>
-      <div class="card-actions justify-end">
-        <button type="submit" class="btn btn-secondary">Submit</button>
+    <div class="flex justify-between items-center">
+      <p class="text-red-500">{{ .ErrorMessage }}</p>
+      <div class="flex space-x-2">
+        <div class="card-actions">
+          <button
+            hx-target="#main-content"
+            hx-swap="innerHTML"
+            hx-get="/tracks"
+            class="btn btn-accent"
+          >
+            Cancel
+          </button>
+        </div>
+        <div class="card-actions">
+          <button type="submit" class="btn btn-secondary">Submit</button>
+        </div>
       </div>
     </div>
   </form>

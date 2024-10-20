@@ -5,7 +5,7 @@ import (
 	"text/template"
 )
 
-func Records(w http.ResponseWriter, r *http.Request) {
+func Stats(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./templates/index.html"))
 	tmpl.Execute(w, nil)
 }

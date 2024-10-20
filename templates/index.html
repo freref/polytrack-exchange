@@ -13,7 +13,7 @@
     ></script>
   </head>
   <body>
-    <div class="navbar sticky top-0 z-50 bg-base-100 shadow-sm bg-opacity-95">
+    <div class="navbar sticky top-0 z-50 bg-base-100 shadow bg-opacity-95">
       <div class="navbar-start">
         <div class="dropdown">
           <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -55,8 +55,8 @@
               >
             </li>
             <li>
-              <a hx-target="#main-content" hx-swap="innerHTML" href="/records"
-                >Records</a
+              <a hx-target="#main-content" hx-swap="innerHTML" href="/stats"
+                >Stats</a
               >
             </li>
           </ul>
@@ -84,8 +84,8 @@
             >
           </li>
           <li>
-            <a hx-target="#main-content" hx-swap="innerHTML" href="/records"
-              >Records</a
+            <a hx-target="#main-content" hx-swap="innerHTML" href="/stats"
+              >Stats</a
             >
           </li>
         </ul>
@@ -96,13 +96,8 @@
     </div>
 
     <div
-      class="relative bg-cover bg-center rounded-lg shadow-lg"
-      style="
-        background-image: url('/static/images/mountains.png');
-        width: 60%;
-        height: 200px;
-        margin: 0 auto;
-      "
+      class="relative bg-cover bg-center rounded-lg shadow-lg w-3/5 h-48 mx-auto mt-5"
+      style="background-image: url('/static/images/mountains.png')"
     ></div>
     <div id="main-content">
       <div hx-get="/home" hx-trigger="load"></div>
