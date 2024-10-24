@@ -49,6 +49,9 @@ func GetTracks(dbpool *pgxpool.Pool) []Track {
 
 func Tracks(dbpool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		//headers := r.Header
+		//_, ok := headers[http.CanonicalHeaderKey("HX-Request")]
+
 		tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
 		tracks := GetTracks(dbpool)
 		tmpl.Execute(w, tracks)
