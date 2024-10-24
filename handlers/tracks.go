@@ -100,7 +100,7 @@ func SubmitTrack(dbpool *pgxpool.Pool) http.HandlerFunc {
 			return
 		}
 
-		sql = `INSERT INTO tracks (title, code, track_description) VALUES ($1, $2, $3)`
+		sql = `INSERT INTO tracks (title, track_description, code) VALUES ($1, $2, $3)`
 		_, err = dbpool.Exec(context.Background(), sql, title, description, code)
 		if err != nil {
 			tmpl := template.Must(template.ParseFiles("./templates/components/track-form.html"))
