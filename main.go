@@ -34,8 +34,6 @@ func main() {
 	http.HandleFunc("/tracks/submit", handlers.SubmitTrack(dbpool))
 	// leaderboards
 	http.HandleFunc("/leaderboards", handlers.Leaderboards(dbpool))
-	// stats
-	http.HandleFunc("/stats", handlers.Stats)
 	// auth
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/login/submit", handlers.LoginSubtmit(dbpool))
