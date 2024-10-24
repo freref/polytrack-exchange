@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
+	"html/template"
 	"net/http"
 	"net/mail"
 	"os"
-	"text/template"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -33,8 +34,25 @@ func createJWT(username string) (string, error) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("./templates/login.html"))
-	tmpl.Execute(w, nil)
+	headers := r.Header
+	_, ok := headers[http.CanonicalHeaderKey("HX-Request")]
+
+	if ok {
+		tmpl := template.Must(template.ParseFiles("./templates/login.html"))
+		tmpl.Execute(w, nil)
+	} else {
+		indexTmpl := template.Must(template.ParseFiles("./templates/index.html"))
+		loginTmpl := template.Must(template.ParseFiles("./templates/login.html"))
+
+		var homeContent bytes.Buffer
+		loginTmpl.Execute(&homeContent, nil)
+
+		data := map[string]interface{}{
+			"MainContent": template.HTML(homeContent.String()),
+		}
+
+		indexTmpl.Execute(w, data)
+	}
 }
 
 func LoginSubtmit(dbpool *pgxpool.Pool) http.HandlerFunc {
@@ -82,8 +100,25 @@ func LoginSubtmit(dbpool *pgxpool.Pool) http.HandlerFunc {
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("./templates/register.html"))
-	tmpl.Execute(w, nil)
+	headers := r.Header
+	_, ok := headers[http.CanonicalHeaderKey("HX-Request")]
+
+	if ok {
+		tmpl := template.Must(template.ParseFiles("./templates/register.html"))
+		tmpl.Execute(w, nil)
+	} else {
+		indexTmpl := template.Must(template.ParseFiles("./templates/index.html"))
+		registerTmpl := template.Must(template.ParseFiles("./templates/register.html"))
+
+		var homeContent bytes.Buffer
+		registerTmpl.Execute(&homeContent, nil)
+
+		data := map[string]interface{}{
+			"MainContent": template.HTML(homeContent.String()),
+		}
+
+		indexTmpl.Execute(w, data)
+	}
 }
 
 func RegisterSubmit(dbpool *pgxpool.Pool) http.HandlerFunc {
