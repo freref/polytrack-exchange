@@ -114,8 +114,6 @@
       class="relative bg-cover bg-center rounded-lg shadow-lg w-3/5 h-48 mx-auto mt-5"
       style="background-image: url('/static/images/mountains.png')"
     ></div>
-    <div id="main-content">
-      <div hx-get="/home" hx-trigger="load"></div>
-    </div>
+    <div id="main-content">{{ .MainContent }}</div>
   </body>
 </html>

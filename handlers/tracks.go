@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"html/template"
 	"net/http"
 	"strings"
-	"text/template"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -49,12 +50,27 @@ func GetTracks(dbpool *pgxpool.Pool) []Track {
 
 func Tracks(dbpool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		//headers := r.Header
-		//_, ok := headers[http.CanonicalHeaderKey("HX-Request")]
+		headers := r.Header
+		_, ok := headers[http.CanonicalHeaderKey("HX-Request")]
 
-		tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
 		tracks := GetTracks(dbpool)
-		tmpl.Execute(w, tracks)
+
+		if ok {
+			tmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
+			tmpl.Execute(w, tracks)
+		} else {
+			indexTmpl := template.Must(template.ParseFiles("./templates/index.html"))
+			tracksTmpl := template.Must(template.ParseFiles("./templates/tracks.html"))
+
+			var tracksContent bytes.Buffer
+			tracksTmpl.Execute(&tracksContent, tracks)
+
+			data := map[string]interface{}{
+				"MainContent": template.HTML(tracksContent.String()),
+			}
+
+			indexTmpl.Execute(w, data)
+		}
 	}
 }
 

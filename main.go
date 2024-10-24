@@ -27,7 +27,7 @@ func main() {
 	// === pages === //
 	// home
 	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/home", handlers.HomeContent)
+	http.HandleFunc("/home", handlers.Home)
 	// tracks
 	http.HandleFunc("/tracks", handlers.Tracks(dbpool))
 	http.HandleFunc("/tracks/add", handlers.AddTrack)
