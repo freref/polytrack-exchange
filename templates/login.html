@@ -1,93 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <link href="../static/css/output.css" rel="stylesheet" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <script
-      src="https://unpkg.com/htmx.org@2.0.3"
-      integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
-      crossorigin="anonymous"
-    ></script>
-  </head>
-  <body>
-    <div class="navbar pt-2 fixed shadow">
-      <div class="navbar-start">
-        <a href="/"
-          ><img src="../static/images/logo.png" class="w-10 h-10 ml-4"
-        /></a>
-      </div>
-      <div class="navbar-end">
-        <ul class="menu menu-horizontal px-1">
-          <li>
-            <p>&nbsp;</p>
-          </li>
-        </ul>
-        <a href="/login" class="btn btn-primary">Login</a>
-      </div>
-    </div>
+<p
+  class="absolute top-14 left-1/2 transform -translate-x-1/2 translate-y-1/2 inline-flex text-9xl font-bold font-poppins"
+>
+  <span
+    class="bg-gradient-to-r from-green-400 via-green-500 to-teal-500 bg-clip-text text-transparent"
+    >Login</span
+  >
+</p>
 
-    <div id="card">
-      <div class="flex items-center justify-center min-h-screen">
-        <div class="p-8 rounded-lg shadow-lg w-80">
-          <form
-            class="space-y-4"
-            hx-post="/login/submit"
-            hx-target="#login-error"
-            hx-swap="innerHTML"
-          >
-            <div>
-              <label for="first" class="block text-sm font-medium"
-                >Username:</label
-              >
-              <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Username"
-                class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
-                required
-              />
-            </div>
+<div class="flex items-center justify-center mt-12">
+  <div class="p-8 rounded-lg shadow-lg w-80">
+    <form
+      class="space-y-4"
+      hx-post="/login/submit"
+      hx-target="#login-error"
+      hx-swap="innerHTML"
+    >
+      <div>
+        <label for="first" class="block text-sm font-medium">Username:</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Username"
+          class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
+          required
+        />
+      </div>
 
-            <div>
-              <label for="password" class="block text-sm font-medium"
-                >Password:</label
-              >
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Password"
-                class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
-                required
-              />
-            </div>
-            <div>
-              <button type="submit" class="w-full btn btn-primary">
-                Login
-              </button>
-              <div id="login-error">
-                {{ block "login-error-block" .}}
-                <p class="text-red-500 text-sm pt-1">{{.ErrorMessage}}</p>
-                {{ end }}
-              </div>
-            </div>
-            <p class="text-center text-sm mt-4">
-              New user?
-              <a
-                hx-get="/register"
-                hx-target="#card"
-                hx-swap="innerHTML"
-                class="text-blue-500 hover:underline cursor-pointer"
-                >Create account here</a
-              >
-            </p>
-          </form>
+      <div>
+        <label for="password" class="block text-sm font-medium"
+          >Password:</label
+        >
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Password"
+          class="mt-1 w-full p-2 border border-gray-300 rounded-lg"
+          required
+        />
+      </div>
+      <div>
+        <button type="submit" class="w-full btn btn-primary">Login</button>
+        <div id="login-error">
+          {{ block "login-error-block" .}}
+          <p class="text-red-500 text-sm pt-1">{{.ErrorMessage}}</p>
+          {{ end }}
         </div>
       </div>
-    </div>
-  </body>
-</html>
+      <p class="text-center text-sm mt-4">
+        New user?
+        <a
+          hx-get="/register"
+          hx-target="#main-content"
+          hx-swap="innerHTML"
+          class="text-blue-500 hover:underline cursor-pointer"
+          >Create account here</a
+        >
+      </p>
+    </form>
+  </div>
+</div>

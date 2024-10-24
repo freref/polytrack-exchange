@@ -23,7 +23,7 @@ func main() {
 	defer dbpool.Close()
 
 	// === components === //
-	http.HandleFunc("/nav", handlers.Nav)
+	http.HandleFunc("/navbar", handlers.Navbar)
 	// === pages === //
 	// home
 	http.HandleFunc("/", handlers.Home)
