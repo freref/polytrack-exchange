@@ -5,7 +5,6 @@ A central place for people to find tracks, leaderboard, stats and more for the g
 ## Requirements
 
 - **Standalone Tailwind CLI** compiled with daisyUI, instructions to compile can be found [here](https://github.com/tailwindlabs/tailwindcss/discussions/12294#discussioncomment-8268378). A precompiled solution can be found [here](https://github.com/dobicinaitis/tailwind-cli-extra).
-- **Go**
 - **Docker**
 - **Make**
 
